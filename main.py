@@ -1,6 +1,9 @@
 import cv2
+from datetime import datetime
 
 initial_frame = None
+status_list = []
+times = []
 
 video = cv2.VideoCapture(0)
 while True:
@@ -28,6 +31,12 @@ while True:
         (x, y, w, h) = cv2.boundingRect(contour)
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
 
+    status_list.append(status)
+    if status_list[-1] == 1 and status_list[-2] == 0:
+        times.append(datetime.now())
+    if status_list[-1] == 0 and status_list[-2] == 1:
+        times.append(datetime.now())
+    
     cv2.imshow("Capturing", frame)
     #cv2.imshow("Delta Image", delta_frame)
     cv2.imshow("Threshold Frame", threshold_frame)
