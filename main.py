@@ -1,9 +1,10 @@
-import cv2
+import cv2, pandas
 from datetime import datetime
 
 initial_frame = None
 status_list = [None, None]
 times = []
+df = pandas.DataFrame(columns=['Start', 'End'])
 
 video = cv2.VideoCapture(0)
 while True:
