@@ -5,6 +5,7 @@ initial_frame = None
 video = cv2.VideoCapture(0)
 while True:
     check, frame = video.read()
+    status = 0
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray, (21, 21), 0)
@@ -12,6 +13,7 @@ while True:
     if initial_frame is None:
         initial_frame = gray
         continue
+    status = 1
 
     delta_frame = cv2.absdiff(initial_frame, gray)
 
@@ -21,7 +23,7 @@ while True:
     (cnts,_) = cv2.findContours(threshold_frame.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     for contour in cnts:
-        if cv2.contourArea(contour) < 1000:
+        if cv2.contourArea(contour) < 10000:
             continue
         (x, y, w, h) = cv2.boundingRect(contour)
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
@@ -33,5 +35,6 @@ while True:
     key = cv2.waitKey(1)
     if key == ord('q'):
         break
+    print(status)
 video.release()
 cv2.destroyAllWindows()
